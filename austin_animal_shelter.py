@@ -119,7 +119,32 @@ def check_id_length(df):
     num_animal_id_dif = (length_series != 7).sum()
     print(f'\n\n\nthere are {num_animal_id_dif} lines with a length different than 7')
 
+def intake_condition_clean(df):
+    print(f'\n\n\nunique conditions in intake condition: {df['intake_condition'].unique()}')
+    print(f'\n\n\nnull values in intake condition: {df['intake_condition'].isna().sum()}')
 
+
+    medical_conditions = ['sick', 'injured', 'medical', 'aged']
+    behavior_conditions = ['feral', 'behavior']
+    reproductive_conditions = ['pregnant', 'nursing']
+    routine_conditions = ['normal']
+
+    df['pregnant_o_nursing'] = np.where(df['intake_condition'].isin(reproductive_conditions), True, False)
+
+    conditions = [
+        df['intake_condition'].isin(medical_conditions) | df['intake_condition'].isin(reproductive_conditions),
+        df['intake_condition'].isin(behavior_conditions),
+        df['intake_condition'].isin(routine_conditions)
+    ]
+
+    choices = [
+        'medical' ,
+        'behavior',
+        'routine'
+    ]
+
+    df['intake_reason'] = np.select(conditions, choices, default = 'Unknown')
+    return df
 
 
 
@@ -137,7 +162,7 @@ outcome_data_raw = import_data('Austin_Animal_Center_Outcomes.csv', 'outcome_dat
 
 #made in google sheets with info exported from this data
 shelter_locations = import_data('austin_shelter_locations.csv', 'shelter_locations')
-akc_groups = import_data('dog_info.csv.csv', 'akc_groups')
+akc_groups = import_data('dog_info.csv', 'akc_groups')
 bird_groups = import_data('bird_info.csv', 'bird_groups')
 rabbit_info = import_data('rabbit_info.csv', 'rabbit_info')
 
@@ -171,8 +196,8 @@ check_id_length(intake_table)
 
 
 '''the next column is intake condition'''
-#first look at how many uniques there are
-print(f'\n\n\nunique conditions in intake condition: {intake_table['intake_condition'].unique()}')
+intake_condition_clean(intake_table)
+
 
 '''
 at this point i have:
