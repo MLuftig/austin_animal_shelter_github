@@ -1,0 +1,27 @@
+Ignore common Python and Data Science-related files
+
+Python virtual environment (if you use one)
+
+venv/
+.venv/
+
+Byte-compiled / optimized / DLL files
+
+pycache/
+*.pyc
+*.pyd
+
+Jupyter Notebook files we don't need
+
+.ipynb_checkpoints/
+
+Intermediate data files that Git doesn't need to track
+
+IMPORTANT: If your final merged CSV is very large, consider adding it here too.
+
+/data/intermediate_file.csv
+
+SQL Database files (we only push the cleaned data, not the whole database)
+
+*.sqlite
+*.db
