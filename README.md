@@ -10,11 +10,10 @@ Methodology and Analysis
 
 1. Data Cleaning and Preprocessing (Python)
 
-Source Data: The primary data comes from two CSV files: Austin_Animal_Center_Intakes.csv and Austin_Animal_Center_Outcomes.csv.  Information regarding specific species was extracted using python and imported into Google sheets where additional information was added regarding group, size, etc
+Source Data: The primary data comes from two CSV files: Austin_Animal_Center_Intakes.csv and Austin_Animal_Center_Outcomes.csv.  Information regarding specific species was extracted using python and imported into Google sheets where additional information was added regarding group, size, etc.
 
-Data Validation: Handled inconsistent naming conventions (e.g., 'Spayed', 'Neutered') in the Sex upon Outcome field.
-
-Feature Engineering: Calculated the exact time an animal spent in the shelter in days, and standardized age metrics.
+Initial steps:
+	- imported csv files
 
 2. SQL Integration (Future Step)
 
