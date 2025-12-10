@@ -93,6 +93,7 @@ def create_animal_table(animal_in, animal_out) -> pd.DataFrame:
                 .drop_duplicates(subset = 'animal_id')
                 .pipe(clean_name)
                 .pipe(clean_age)
+                .pipe(lifecycle)
                 .pipe(clean_sex)
                 .pipe(clean_breed)
                 .pipe(clean_spp)
@@ -125,7 +126,7 @@ def create_animal_table(animal_in, animal_out) -> pd.DataFrame:
     count_dups = merged_df['animal_id'].duplicated().sum()
     print(f'\nThere are {count_dups} duplicated animal_id values in the merged animal table.')
     animal_table = merged_df[['animal_id', 'cln_name_outcome', 'cln_spp_outcome', 'primary_breed_intake', 'secondary_breed_intake', 'akc_group_outcome', 'hair_length_outcome', 
-                              'cln_color_intake', 'altered_outcome', 'cln_sex_outcome', 'age_yr_outcome']].copy()
+                              'cln_color_intake', 'altered_outcome', 'cln_sex_outcome', 'age_yr_outcome', 'lifecycle_stage_outcome']].copy()
     print('\n\n\nFinal animal table preview:')
     print(animal_table.head())
     print('*' * 30)
@@ -465,6 +466,33 @@ def clean_age(df) -> pd.DataFrame:
         print(f'Error: {e}')
         return df
 
+def lifecycle(df) -> pd.DataFrame:
+    header2()
+    try:
+        assert 'age_yr' in df.columns, 'age_yr column not found in DataFrame. Cannot classify lifecycle.'
+        print('Beginning to classify lifecycle stages')
+        
+        conditions = [
+            (df['age_yr'] < 1), # less than 1 year
+            (df['age_yr'] >= 1) & (df['age_yr'] < 3), # 1 to less than 3 years
+            (df['age_yr'] >= 3) & (df['age_yr'] < 7), # 3 to less than 7 years
+            (df['age_yr'] >= 7) # 7 years and older
+        ]
+
+        choices = [
+            'juvenile',
+            'young adult',
+            'adult',
+            'senior'
+        ]
+
+        df['lifecycle_stage'] = np.select(conditions, choices, default = 'unknown')
+        print('...complete')
+        return df
+    except AssertionError as e:
+        print(f'Error: {e}')
+        return df
+    
 def clean_sex(df) -> pd.DataFrame:
     
     header2()
